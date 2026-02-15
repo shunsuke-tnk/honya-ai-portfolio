@@ -8,23 +8,37 @@ import Pagination from './Pagination';
 interface VerticalSwiperProps {
   works: Work[];
   className?: string;
+  currentIndex?: number;
+  onIndexChange?: (index: number) => void;
 }
 
 const SWIPE_THRESHOLD = 50;
 
-export default function VerticalSwiper({ works, className = '' }: VerticalSwiperProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+export default function VerticalSwiper({
+  works,
+  className = '',
+  currentIndex: externalIndex,
+  onIndexChange
+}: VerticalSwiperProps) {
+  const [internalIndex, setInternalIndex] = useState(0);
   const [translateY, setTranslateY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const startYRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // 外部から制御される場合はexternalIndexを使用、そうでなければ内部状態
+  const currentIndex = externalIndex ?? internalIndex;
+
   const goToSlide = useCallback((index: number) => {
     if (index >= 0 && index < works.length) {
-      setCurrentIndex(index);
+      if (onIndexChange) {
+        onIndexChange(index);
+      } else {
+        setInternalIndex(index);
+      }
       setTranslateY(0);
     }
-  }, [works.length]);
+  }, [works.length, onIndexChange]);
 
   const goNext = useCallback(() => {
     goToSlide(currentIndex + 1);

@@ -6,7 +6,6 @@ import { useIsDesktop } from '@/hooks/useMediaQuery';
 import VerticalSwiper from './VerticalSwiper';
 import PhoneMockup from '@/components/mockup/PhoneMockup';
 import SwipeController from './SwipeController';
-import Pagination from './Pagination';
 
 export default function WorksViewer() {
   const isDesktop = useIsDesktop();
@@ -24,6 +23,10 @@ export default function WorksViewer() {
     }
   }, [currentIndex]);
 
+  const handleIndexChange = useCallback((index: number) => {
+    setCurrentIndex(index);
+  }, []);
+
   // モバイル表示
   if (!isDesktop) {
     return (
@@ -39,7 +42,11 @@ export default function WorksViewer() {
       <div className="flex items-center gap-12">
         {/* スマホモック */}
         <PhoneMockup>
-          <VerticalSwiper works={works} />
+          <VerticalSwiper
+            works={works}
+            currentIndex={currentIndex}
+            onIndexChange={handleIndexChange}
+          />
         </PhoneMockup>
 
         {/* 右側のコントロール＆情報 */}
