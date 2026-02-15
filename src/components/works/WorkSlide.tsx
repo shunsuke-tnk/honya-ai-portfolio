@@ -13,7 +13,7 @@ export default function WorkSlide({ work, isActive }: WorkSlideProps) {
   const categoryInfo = getCategoryInfo(work.category);
 
   return (
-    <div className="relative w-full h-full bg-black">
+    <div className="relative w-full h-full bg-black overflow-hidden">
       {/* 動画プレイヤー */}
       <VideoPlayer src={work.videoUrl} isActive={isActive} />
 

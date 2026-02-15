@@ -106,21 +106,21 @@ export default function VerticalSwiper({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full h-full overflow-hidden bg-black ${className}`}
+      className={`relative w-full h-full overflow-hidden bg-black isolate ${className}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       {/* スライド */}
       <div
-        className="h-full transition-transform duration-300 ease-out"
+        className="w-full h-full transition-transform duration-300 ease-out"
         style={{
           transform: `translateY(calc(-${currentIndex * 100}% + ${translateY}px))`,
           transitionDuration: isDragging ? '0ms' : '300ms',
         }}
       >
         {works.map((work, index) => (
-          <div key={work.id} className="w-full h-full">
+          <div key={work.id} className="w-full h-full flex-shrink-0">
             <WorkSlide work={work} isActive={index === currentIndex} />
           </div>
         ))}

@@ -35,7 +35,7 @@ export default function VideoPlayer({ src, isActive, className = '' }: VideoPlay
   };
 
   return (
-    <div className={`relative w-full h-full ${className}`}>
+    <div className={`absolute inset-0 overflow-hidden ${className}`}>
       {/* プレースホルダー（動画がない場合） */}
       {!isLoaded && (
         <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center">
@@ -46,7 +46,7 @@ export default function VideoPlayer({ src, isActive, className = '' }: VideoPlay
       <video
         ref={videoRef}
         src={src}
-        className="w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-contain"
         muted={isMuted}
         loop
         playsInline
