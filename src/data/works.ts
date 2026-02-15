@@ -120,7 +120,7 @@ export const works: Work[] = [
     title: '手相占いアプリ',
     description: '手のひらを撮影するだけでAIが手相を診断。運勢をチェック',
     videoUrl: '/videos/792686320.515657.mp4',
-    thumbnailUrl: '/thumbnails/792686320.515657.jpg',
+    thumbnailUrl: '/thumbnails/tesou-screenshot.jpg',
     tags: ['占い', '手相', 'AI診断'],
     category: 'utility',
     order: 12,
