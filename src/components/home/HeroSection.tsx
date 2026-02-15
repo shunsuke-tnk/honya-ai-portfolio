@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden pt-0">
       {/* 背景グラデーション */}
       <div className="absolute inset-0 gradient-pop opacity-90" />
 
@@ -37,11 +37,11 @@ export default function HeroSection() {
         </Link>
       </div>
 
-      {/* 下部の波形 */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+      {/* 下部の波形 - 白背景へ自然につなげる */}
+      <div className="absolute -bottom-1 left-0 right-0">
+        <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full" preserveAspectRatio="none">
           <path
-            d="M0 120V60C240 20 480 0 720 20C960 40 1200 80 1440 60V120H0Z"
+            d="M0 80V40C240 10 480 0 720 10C960 20 1200 50 1440 40V80H0Z"
             fill="white"
           />
         </svg>

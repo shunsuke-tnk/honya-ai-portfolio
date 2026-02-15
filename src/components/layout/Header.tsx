@@ -17,19 +17,19 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
           <span className="text-2xl">📚</span>
-          <span className="font-bold text-lg gradient-text group-hover:opacity-80 transition-opacity">
-            本屋さんのAI教室
+          <span className="font-bold text-sm gradient-text group-hover:opacity-80 transition-opacity leading-tight">
+            本屋さんの<br />AI教室
           </span>
         </Link>
 
-        <nav className="flex items-center gap-1">
+        <nav className="flex items-center gap-0.5">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-2 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
                   isActive
                     ? 'bg-primary-500 text-white'
                     : 'text-gray-600 hover:bg-gray-100'
