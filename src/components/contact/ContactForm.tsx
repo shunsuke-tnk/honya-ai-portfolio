@@ -20,24 +20,37 @@ export default function ContactForm() {
     const formData = new FormData(e.currentTarget);
 
     try {
-      // Formspreeに送信（または他のサービス）
-      const response = await fetch('https://formspree.io/f/your-form-id', {
+      // Google Apps Script Web App に送信
+      const GOOGLE_SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || '';
+
+      if (!GOOGLE_SCRIPT_URL) {
+        throw new Error('送信先が設定されていません');
+      }
+
+      const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        subject: formData.get('subject') || '（件名なし）',
+        message: formData.get('message'),
+        timestamp: new Date().toISOString(),
+      };
+
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        body: formData,
+        mode: 'no-cors',
         headers: {
-          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify(data),
       });
 
-      if (response.ok) {
-        setFormState({
-          status: 'success',
-          message: 'お問い合わせを受け付けました。ありがとうございます！',
-        });
-        (e.target as HTMLFormElement).reset();
-      } else {
-        throw new Error('送信に失敗しました');
-      }
+      // no-cors モードでは response.ok が常に false になるため、
+      // エラーがなければ成功とみなす
+      setFormState({
+        status: 'success',
+        message: 'お問い合わせを受け付けました。ありがとうございます！',
+      });
+      (e.target as HTMLFormElement).reset();
     } catch {
       setFormState({
         status: 'error',
