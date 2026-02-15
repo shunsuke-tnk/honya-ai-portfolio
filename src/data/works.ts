@@ -100,7 +100,7 @@ export const works: Work[] = [
     title: 'NEON HORIZON 3D',
     description: 'ネオンの世界を舞台にした迫力の3Dシューティングゲーム',
     videoUrl: '/videos/792686320.467639.mp4',
-    thumbnailUrl: '/thumbnails/792686320.467639.jpg',
+    thumbnailUrl: '/thumbnails/neon-horizon-screenshot.jpg',
     tags: ['ゲーム', '3D', 'シューティング'],
     category: 'entertainment',
     order: 10,

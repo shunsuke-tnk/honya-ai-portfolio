@@ -27,12 +27,23 @@ export default function WorkPreview() {
                 {/* サムネイル */}
                 <div className="aspect-[9/16] bg-gradient-to-br from-primary-100 to-secondary-100 relative overflow-hidden">
                   {work.thumbnailUrl ? (
-                    <Image
-                      src={work.thumbnailUrl}
-                      alt={work.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                    work.thumbnailUrl.match(/\.(mp4|mov|webm)$/i) ? (
+                      <video
+                        src={work.thumbnailUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <Image
+                        src={work.thumbnailUrl}
+                        alt={work.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    )
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-6xl opacity-50 group-hover:scale-110 transition-transform">
