@@ -8,6 +8,7 @@ const notoSansJP = Noto_Sans_JP({
   variable: "--font-noto-sans-jp",
   subsets: ["latin"],
   weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${notoSansJP.variable} antialiased min-h-screen flex flex-col`}
+        className={`${notoSansJP.variable} ${notoSansJP.className} antialiased min-h-screen flex flex-col`}
       >
         <Header />
         <main className="flex-1">
