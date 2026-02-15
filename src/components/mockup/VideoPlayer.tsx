@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 
 interface VideoPlayerProps {
   src: string;
@@ -8,10 +8,20 @@ interface VideoPlayerProps {
   className?: string;
 }
 
+// 時間をMM:SS形式にフォーマット
+function formatTime(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
 export default function VideoPlayer({ src, isActive, className = '' }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -24,6 +34,46 @@ export default function VideoPlayer({ src, isActive, className = '' }: VideoPlay
     } else {
       video.pause();
       video.currentTime = 0;
+    }
+  }, [isActive]);
+
+  // 時間更新のハンドラ
+  const handleTimeUpdate = useCallback(() => {
+    const video = videoRef.current;
+    if (video && !isDragging) {
+      setCurrentTime(video.currentTime);
+    }
+  }, [isDragging]);
+
+  // 動画の長さを取得
+  const handleLoadedMetadata = useCallback(() => {
+    const video = videoRef.current;
+    if (video) {
+      setDuration(video.duration);
+      setIsLoaded(true);
+    }
+  }, []);
+
+  // シークバーの変更
+  const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const video = videoRef.current;
+    const newTime = parseFloat(e.target.value);
+    if (video) {
+      video.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  }, []);
+
+  // ドラッグ開始時に動画を一時停止
+  const handleSeekStart = useCallback(() => {
+    setIsDragging(true);
+  }, []);
+
+  // ドラッグ終了時に再生再開
+  const handleSeekEnd = useCallback(() => {
+    setIsDragging(false);
+    if (isActive && videoRef.current) {
+      videoRef.current.play().catch(() => {});
     }
   }, [isActive]);
 
@@ -52,14 +102,57 @@ export default function VideoPlayer({ src, isActive, className = '' }: VideoPlay
         playsInline
         preload="metadata"
         onLoadedData={() => setIsLoaded(true)}
+        onLoadedMetadata={handleLoadedMetadata}
+        onTimeUpdate={handleTimeUpdate}
         onError={() => setIsLoaded(false)}
       />
+
+      {/* シークバー・コントロール */}
+      {isLoaded && (
+        <div className="absolute bottom-24 left-4 right-4 z-10">
+          {/* 時間表示 */}
+          <div className="flex items-center justify-between text-white text-xs mb-1">
+            <span className="bg-black/50 px-2 py-0.5 rounded">{formatTime(currentTime)}</span>
+            <span className="bg-black/50 px-2 py-0.5 rounded">{formatTime(duration)}</span>
+          </div>
+          {/* シークバー */}
+          <input
+            type="range"
+            min={0}
+            max={duration || 100}
+            step={0.1}
+            value={currentTime}
+            onChange={handleSeek}
+            onMouseDown={handleSeekStart}
+            onMouseUp={handleSeekEnd}
+            onTouchStart={handleSeekStart}
+            onTouchEnd={handleSeekEnd}
+            className="w-full h-2 bg-white/30 rounded-full appearance-none cursor-pointer
+              [&::-webkit-slider-thumb]:appearance-none
+              [&::-webkit-slider-thumb]:w-4
+              [&::-webkit-slider-thumb]:h-4
+              [&::-webkit-slider-thumb]:rounded-full
+              [&::-webkit-slider-thumb]:bg-white
+              [&::-webkit-slider-thumb]:shadow-lg
+              [&::-webkit-slider-thumb]:cursor-pointer
+              [&::-moz-range-thumb]:w-4
+              [&::-moz-range-thumb]:h-4
+              [&::-moz-range-thumb]:rounded-full
+              [&::-moz-range-thumb]:bg-white
+              [&::-moz-range-thumb]:border-0
+              [&::-moz-range-thumb]:cursor-pointer"
+            style={{
+              background: `linear-gradient(to right, rgba(255,255,255,0.9) ${(currentTime / (duration || 1)) * 100}%, rgba(255,255,255,0.3) ${(currentTime / (duration || 1)) * 100}%)`
+            }}
+          />
+        </div>
+      )}
 
       {/* ミュートボタン */}
       {isLoaded && (
         <button
           onClick={toggleMute}
-          className="absolute bottom-20 right-4 w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors z-10"
+          className="absolute bottom-36 right-4 w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors z-10"
         >
           {isMuted ? (
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
