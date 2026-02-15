@@ -140,7 +140,7 @@ export const works: Work[] = [
     title: 'お部屋模様替えシミュレーション',
     description: '部屋の写真を撮ると、AIが様々なインテリアスタイルを提案',
     videoUrl: '/videos/画面収録 2026-02-14 1.12.38.mov',
-    thumbnailUrl: '/thumbnails/画面収録 2026-02-14 1.12.38.jpg',
+    thumbnailUrl: '/thumbnails/oheya-screenshot.jpg',
     tags: ['実用', 'インテリア', 'シミュレーション'],
     category: 'productivity',
     order: 14,
