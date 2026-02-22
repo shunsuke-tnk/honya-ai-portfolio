@@ -6,6 +6,7 @@ interface VideoPlayerProps {
   src: string;
   isActive: boolean;
   className?: string;
+  onEnded?: () => void;
 }
 
 // 時間をMM:SS形式にフォーマット
@@ -15,7 +16,7 @@ function formatTime(seconds: number): string {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
-export default function VideoPlayer({ src, isActive, className = '' }: VideoPlayerProps) {
+export default function VideoPlayer({ src, isActive, className = '', onEnded }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -98,12 +99,12 @@ export default function VideoPlayer({ src, isActive, className = '' }: VideoPlay
         src={src}
         className="absolute inset-0 w-full h-full object-contain"
         muted={isMuted}
-        loop
         playsInline
         preload="metadata"
         onLoadedData={() => setIsLoaded(true)}
         onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
+        onEnded={onEnded}
         onError={() => setIsLoaded(false)}
       />
 

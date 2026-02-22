@@ -7,15 +7,16 @@ import VideoPlayer from '@/components/mockup/VideoPlayer';
 interface WorkSlideProps {
   work: Work;
   isActive: boolean;
+  onVideoEnded?: () => void;
 }
 
-export default function WorkSlide({ work, isActive }: WorkSlideProps) {
+export default function WorkSlide({ work, isActive, onVideoEnded }: WorkSlideProps) {
   const categoryInfo = getCategoryInfo(work.category);
 
   return (
     <div className="relative w-full h-full bg-black overflow-hidden">
       {/* 動画プレイヤー */}
-      <VideoPlayer src={work.videoUrl} isActive={isActive} />
+      <VideoPlayer src={work.videoUrl} isActive={isActive} onEnded={onVideoEnded} />
 
       {/* オーバーレイ情報 */}
       <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">

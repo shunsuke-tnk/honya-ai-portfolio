@@ -121,7 +121,7 @@ export default function VerticalSwiper({
       >
         {works.map((work, index) => (
           <div key={work.id} className="w-full h-full flex-shrink-0">
-            <WorkSlide work={work} isActive={index === currentIndex} />
+            <WorkSlide work={work} isActive={index === currentIndex} onVideoEnded={goNext} />
           </div>
         ))}
       </div>
